@@ -21,22 +21,6 @@ loop validation has not been done.
 
 ![Process](docs/figures/process.svg)
 
-```mermaid
-flowchart LR
-  A[Public tractor recordings<br/>24.7 h, CC BY 4.0] --> B[J1939 frame<br/>reconstruction]
-  B --> C[Seeded attack injection<br/>5 families, 72 episodes]
-  T[Threat model<br/>ISO/SAE 21434-style] -.defines.-> C
-  C --> D[Labelled dataset<br/>clean 1-6 / attacked 7-10]
-  D --> E[Rule-based IDS<br/>Phase 1]
-  E --> F[Phase 1 result<br/>F1 0.935, FPR 0.05 %]
-  D --> G[Tiny context model<br/>Phase 2, 129 params]
-  G --> H[int8 export +<br/>C reference]
-  H --> I[Cortex-M size<br/>1,300 B on M4]
-  H --> J[SIL replay<br/>virtual CAN bus]
-  I -.-> K[Hardware-in-the-loop<br/>open]
-  J -.-> K
-```
-
 ## The outcomes, at a glance
 
 ![Overview dashboard](results/figures/overview_dashboard.png)

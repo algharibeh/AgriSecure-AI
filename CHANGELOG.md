@@ -16,8 +16,9 @@ Phase 2, first result, started early on the Phase 1 data.
 - Software-in-the-loop replay over a python-can virtual bus
   (`scripts/sil_replay.py`), results in `results/sil_phase2.json`.
 - `REPORT_phase2.md`; README Phase 2 section.
-- Reader-facing material: a process diagram (`docs/figures/process.svg` and a
-  Mermaid version in the README), three figures drawn from the result files by
+- Reader-facing material: a process diagram (`docs/figures/process.svg`;
+  the README's Mermaid copy of it was removed so the README prints as it is
+  read on GitHub), three figures drawn from the result files by
   `scripts/make_figures.py` (overview dashboard, attack strips, phase status),
   a two-page explainer `docs/OVERVIEW.md`, and a README that opens with the
   plain-language summary, the diagram, the figures and a "where to look" table.
