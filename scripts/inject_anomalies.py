@@ -90,6 +90,7 @@ def inject_field(df: pd.DataFrame, rng, field) -> tuple:
 
     # flood: ~1 ms spacing, priority 0, foreign SA, PGN 0 (bogus)
     for s, e in pick_windows(rng, t0, t1, PLAN["flood"]["n"], PLAN["flood"]["dur"]):
+        n0 = len(new_rows)
         t = s
         while t < e:
             data = bytes(int(x) for x in rng.integers(0, 256, 8))
@@ -97,10 +98,11 @@ def inject_field(df: pd.DataFrame, rng, field) -> tuple:
             new_rows.append(_frame(t, EEC1, data, FOREIGN_SA_FLOOD, 1, "flood",
                                    can_id=cid, pgn=0, prio=0))
             t += rng.uniform(0.0008, 0.0014)
-        events.append((field, "flood", round(s, 3), round(e, 3), 0))
+        events.append((field, "flood", round(s, 3), round(e, 3), len(new_rows) - n0))
 
     # injection: fabricated EEC1 at ~50 ms, real SA, implausible engine speed
     for s, e in pick_windows(rng, t0, t1, PLAN["injection"]["n"], PLAN["injection"]["dur"]):
+        n0 = len(new_rows)
         t = s
         bad_rpm = float(rng.choice([0.0, 2900.0, 2950.0]))
         while t < e:
@@ -109,10 +111,11 @@ def inject_field(df: pd.DataFrame, rng, field) -> tuple:
             data = C.pack_frame(EEC1, row)
             new_rows.append(_frame(t, EEC1, data, C.SA_ENGINE, 1, "injection"))
             t += rng.uniform(0.045, 0.055)
-        events.append((field, "injection", round(s, 3), round(e, 3), 0))
+        events.append((field, "injection", round(s, 3), round(e, 3), len(new_rows) - n0))
 
     # masquerade: EEC1 from foreign SA at ~100 ms, plausible value
     for s, e in pick_windows(rng, t0, t1, PLAN["masquerade"]["n"], PLAN["masquerade"]["dur"]):
+        n0 = len(new_rows)
         t = s
         while t < e:
             row = {"EngineSpeed": float(rng.uniform(1800, 2300)),
@@ -120,11 +123,12 @@ def inject_field(df: pd.DataFrame, rng, field) -> tuple:
             data = C.pack_frame(EEC1, row)
             new_rows.append(_frame(t, EEC1, data, FOREIGN_SA_MASQ, 1, "masquerade"))
             t += rng.uniform(0.095, 0.105)
-        events.append((field, "masquerade", round(s, 3), round(e, 3), 0))
+        events.append((field, "masquerade", round(s, 3), round(e, 3), len(new_rows) - n0))
 
     # replay: copy an earlier EEC1 block and re-send it later verbatim
     eec1 = df[df["label"] == "EEC1"].reset_index(drop=True)
     for s, e in pick_windows(rng, t0, t1, PLAN["replay"]["n"], PLAN["replay"]["dur"]):
+        n0 = len(new_rows)
         dur = e - s
         src0 = rng.uniform(t0 + 10, s - dur - 10)
         block = eec1[(eec1["t_s"] >= src0) & (eec1["t_s"] < src0 + dur)]
@@ -133,7 +137,7 @@ def inject_field(df: pd.DataFrame, rng, field) -> tuple:
             data = bytes.fromhex(r["data_hex"])
             new_rows.append(_frame(r["t_s"] + shift, EEC1, data, C.SA_ENGINE,
                                    1, "replay"))
-        events.append((field, "replay", round(s, 3), round(e, 3), 0))
+        events.append((field, "replay", round(s, 3), round(e, 3), len(new_rows) - n0))
 
     df = pd.concat([df, pd.DataFrame(new_rows, columns=C.FRAME_COLUMNS)],
                    ignore_index=True)
