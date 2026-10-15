@@ -1,0 +1,20 @@
+# Raw and downloaded data — never commit (large and/or third-party licensed)
+data/
+downloads/
+*.rar
+*.zip
+*.gz
+*.log.bin
+
+# Generated dataset blobs (keep schema + datasheet in git, not the big files)
+dataset/*.parquet
+dataset/*.csv
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# OS / editor
+Thumbs.db
+.DS_Store
