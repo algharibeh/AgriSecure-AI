@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software or dataset, please cite it as below."
+type: software
+title: "AgriSecure-AI: Phase 1 threat model, labelled J1939 dataset and baseline detection"
+authors:
+  - family-names: Algharibeh
+    given-names: Moath
+version: 0.1.0
+date-released: 2026-10-15
+repository-code: "https://github.com/algharibeh/AgriSecure-AI"
+license: MIT
+keywords:
+  - CAN bus
+  - SAE J1939
+  - ISOBUS
+  - intrusion detection
+  - agricultural machinery
+  - cybersecurity
+  - dataset
+abstract: >-
+  Phase 1 of AgriSecure-AI: an ISO/SAE 21434-style threat model of a tractor
+  J1939 / ISOBUS network, a labelled dataset built by reconstructing a J1939
+  frame stream from real tractor signals and injecting seeded, simulated
+  anomaly scenarios, and a rule-based and Isolation Forest baseline evaluated
+  on held-out attacked fields. The dataset is released under CC BY 4.0 and is
+  derived from the Tümosan 81.110 P tractor recordings on Mendeley Data
+  (DOI 10.17632/bbjtjrsxvx.2, CC BY 4.0); the code is MIT-licensed.
+references:
+  - type: data
+    title: "Tümosan 81.110 P tractor soil-tillage CAN/J1939 recordings"
+    doi: 10.17632/bbjtjrsxvx.2
+    repository: "https://data.mendeley.com/datasets/bbjtjrsxvx/2"
+    license: CC-BY-4.0
