@@ -1,0 +1,96 @@
+{
+  "mode": "software-in-the-loop (python-can virtual bus, wall-clock replay); not HIL",
+  "detector": "Phase 1 rules + int8 spread-consistency model, streaming (mirror of embedded/tiny_ids.c)",
+  "segments": [
+    {
+      "family": "flood",
+      "field": "field_7",
+      "segment_s": [
+        1798.8,
+        1829.701
+      ],
+      "frames_replayed": 2706,
+      "attack_frames": 908,
+      "rule_latency_ms": 0.5,
+      "model_latency_ms": null,
+      "hybrid_latency_ms": 0.5,
+      "pre_attack_false_flags": {
+        "rule_frames": 0,
+        "model_windows": 0
+      },
+      "us_per_frame_processing": 100.6
+    },
+    {
+      "family": "injection",
+      "field": "field_7",
+      "segment_s": [
+        2151.1,
+        2186.001
+      ],
+      "frames_replayed": 2131,
+      "attack_frames": 101,
+      "rule_latency_ms": 0.1,
+      "model_latency_ms": 482.9,
+      "hybrid_latency_ms": 0.1,
+      "pre_attack_false_flags": {
+        "rule_frames": 0,
+        "model_windows": 0
+      },
+      "us_per_frame_processing": 145.7
+    },
+    {
+      "family": "masquerade",
+      "field": "field_7",
+      "segment_s": [
+        1144.0,
+        1178.901
+      ],
+      "frames_replayed": 2080,
+      "attack_frames": 50,
+      "rule_latency_ms": 1.3,
+      "model_latency_ms": null,
+      "hybrid_latency_ms": 1.3,
+      "pre_attack_false_flags": {
+        "rule_frames": 0,
+        "model_windows": 0
+      },
+      "us_per_frame_processing": 155.5
+    },
+    {
+      "family": "replay",
+      "field": "field_7",
+      "segment_s": [
+        170.7,
+        204.601
+      ],
+      "frames_replayed": 2012,
+      "attack_frames": 40,
+      "rule_latency_ms": 0.1,
+      "model_latency_ms": 36.7,
+      "hybrid_latency_ms": 0.1,
+      "pre_attack_false_flags": {
+        "rule_frames": 0,
+        "model_windows": 0
+      },
+      "us_per_frame_processing": 131.7
+    },
+    {
+      "family": "freeze",
+      "field": "field_7",
+      "segment_s": [
+        364.9,
+        400.801
+      ],
+      "frames_replayed": 2088,
+      "attack_frames": 60,
+      "rule_latency_ms": null,
+      "model_latency_ms": null,
+      "hybrid_latency_ms": null,
+      "pre_attack_false_flags": {
+        "rule_frames": 0,
+        "model_windows": 0
+      },
+      "us_per_frame_processing": 132.0
+    }
+  ]
+}
