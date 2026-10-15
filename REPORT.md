@@ -40,9 +40,10 @@ standard J1939 parameter groups at standard transmission periods, giving about
 round-trip decode. Fields 1–6 are kept attack-free for training; fields 7–10
 (about 2.26 million frames) receive injected attacks for evaluation.
 
-No public dataset carried agricultural J1939 traffic with labelled attacks before
-this: the published J1939 attack datasets are from trucks, and the agricultural
-datasets contain normal operation only. This dataset closes that gap.
+We found no public dataset of agricultural J1939 traffic with labelled attacks as
+of October 2026: the published J1939 attack datasets we found are from trucks, and
+the agricultural datasets contain normal operation only. The sources checked are
+listed in `AVAILABILITY.md`. This dataset is built to fill that gap.
 
 ## Detectors
 
@@ -132,9 +133,11 @@ from version control; `AVAILABILITY.md` documents its source and licence.
 | Phase 1 objective | State |
 | --- | --- |
 | Threat analysis of agricultural J1939 attack vectors | Done |
-| Data infrastructure and a labelled dataset for training/evaluation | Done (software; first agricultural J1939 set with labelled attacks) |
-| Dataset prepared for future public release | Done (CC BY 4.0, datasheet) |
+| Data infrastructure and a labelled dataset for training/evaluation | Done (software; no public agricultural J1939 set with labelled attacks was found, see `AVAILABILITY.md`) |
+| Dataset prepared for future public release | Done (CC BY 4.0, datasheet, checksums; parquet files to be attached to the release or deposited with a DOI) |
 | Hardware-in-the-loop attack simulation | Open — needs a physical bus / HIL rig |
+| Comparison against the Korea J1939DB-IDS truck dataset (external validity) | Open — deferred to Phase 2 |
 
-Phase 1 is complete in software and produces a real, reproducible, publishable
-result. The remaining Phase 1 item is hardware-in-the-loop, which is hardware work.
+The software part of Phase 1 is complete and produces a real, reproducible result.
+The remaining Phase 1 items are hardware-in-the-loop, which is hardware work, and
+the cross-dataset comparison.

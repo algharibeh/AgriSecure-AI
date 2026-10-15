@@ -6,8 +6,9 @@ A labelled CAN / SAE J1939 dataset for agricultural intrusion-detection research
 real tractor signal content carried in a reconstructed J1939 frame stream, with
 reproducible, simulated anomaly scenarios. It is built to fill a specific gap:
 public J1939 attack datasets exist for trucks, and public agricultural datasets
-exist without attacks, but no public dataset carries agricultural traffic with
-labelled attacks.
+exist without attacks, but we found no public dataset carrying agricultural
+traffic with labelled attacks as of October 2026 (sources checked are listed in
+`AVAILABILITY.md`).
 
 ## Provenance and honesty statement
 
@@ -53,10 +54,37 @@ the source is not mapped to a broadcast PGN. Unused payload bytes are the J1939
   frame count.
 - `dataset/SAMPLE_field7_attacked.csv` — a small human-readable excerpt.
 
+Only `events.csv` and the sample are in version control. The parquet files
+(about 45 MB in total) are reproduced byte-for-byte by the scripts, because the
+generator is seeded; they will be attached to the tagged release or deposited
+with a DOI, and until then are available on request. Their SHA-256 checksums are
+listed below so any copy can be verified against this commit.
+
 Per-frame columns (candump-style; decoded values are recovered from `data_hex` via
 `scripts/common.py`):
 
 `t_s, can_id_hex, pgn, label, priority, source_addr, dlc, data_hex, attack, attack_type`
+
+## Checksums (SHA-256)
+
+As built from the scripts at this commit with `SEED = 20261015`.
+
+| File | SHA-256 |
+| --- | --- |
+| `dataset/normal/field_1.parquet` | `b0e47fb97d4461e82dca069502af0856cda33b9794d13f8ea5b745dd84cee831` |
+| `dataset/normal/field_2.parquet` | `27db82a77f64418e3566614ff8a180b78e2c124b1b08a4f06d83cd64d51a4060` |
+| `dataset/normal/field_3.parquet` | `970aa90837236f89cc6e90f11decc3cb4500b95b918ca530c63880a765db53bc` |
+| `dataset/normal/field_4.parquet` | `7f09b35a00e46bae9dcb853bee8cec2216fc78767487d016bb1db4d588edcd3a` |
+| `dataset/normal/field_5.parquet` | `1577868bcf6d0aff0da71c27d381a0329fdc7a2f25785d72270b317629d32318` |
+| `dataset/normal/field_6.parquet` | `6e9c1f4e97a03e21b958b377268977af09e16110d94a20c6bb57223671ac3893` |
+| `dataset/normal/field_7.parquet` | `920f10f7eab7d292b0dc9f24d61f856d4d7c9ff757372a7116a75bbbc0a3b794` |
+| `dataset/normal/field_8.parquet` | `b1a62b3b846ea13806e5f1a53b8fa117fdf7a3d91f0249378d54b2593be8165a` |
+| `dataset/normal/field_9.parquet` | `7f5c5b3e7dab9f18f884b5cecfebbd4323ec1b57d725d99786c0b843a930cf29` |
+| `dataset/normal/field_10.parquet` | `bdcc99a52df1a9d5846f0dae3dae839edc02eb696f84362bb63f7e56aff9e761` |
+| `dataset/attacked/field_7.parquet` | `f45d9a3f2bcf7acdc2b7560d5b03991730c938eea6ca63b6e6152be30c39caac` |
+| `dataset/attacked/field_8.parquet` | `6430583df9f7eae1da6cf9684c38fbd24a3f94b019a82117ee96ddd9f1f7ece7` |
+| `dataset/attacked/field_9.parquet` | `356a4951ef78afa90c7071e2a34e1e70e4f0088e82bb2009e6839972c12a4d54` |
+| `dataset/attacked/field_10.parquet` | `412a8fb85f2309f27a62f5e024027aeb42fb3b24e27368f89160d02bfe800a72` |
 
 ## Scale
 

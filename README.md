@@ -8,7 +8,7 @@ intended to run inside resource-constrained electronic control units and to meet
 functional-safety (ISO 26262) and cybersecurity (ISO/SAE 21434) expectations
 together. This repository holds the Phase 1 evaluation groundwork.
 
-## Phase 1 — done in software
+## Phase 1 — software groundwork
 
 Phase 1 delivers a threat model, a labelled dataset, and baseline detection
 results. It runs entirely in software on one PC; no vehicle, no physical bus, and
@@ -19,8 +19,9 @@ the one Phase 1 item that needs hardware and remains open.
   tractor J1939 / ISOBUS network and five attack families.
 - **Dataset**: `docs/DATASET_DATASHEET.md` — real Tümosan tractor signals
   (CC BY 4.0) reconstructed into a standards-conformant J1939 frame stream, with
-  seeded, labelled anomaly scenarios. The first public agricultural J1939 dataset
-  with labelled attacks.
+  seeded, labelled anomaly scenarios. We found no public dataset of agricultural
+  J1939 traffic with labelled attacks as of October 2026; the sources checked are
+  listed in `AVAILABILITY.md`.
 - **Baseline detection**: `scripts/detect_baseline.py` — a lightweight rule-based
   IDS and an Isolation Forest, evaluated on held-out attacked data.
 - **Full write-up**: `REPORT.md`.
@@ -45,8 +46,11 @@ scripts/common.py          J1939 PGN/SPN mapping, packing, loaders
 scripts/build_can_stream.py   real signals -> J1939 frame stream
 scripts/inject_anomalies.py   seeded, labelled attack injection
 scripts/detect_baseline.py    rule-based + Isolation Forest, metrics
-dataset/                   reconstructed + attacked frames (large files untracked)
+dataset/                   events.csv + readable sample (parquet files untracked, see below)
 results/                   metrics.json, figures
+LICENSE                    MIT for the code; the dataset is CC BY 4.0
+CITATION.cff               how to cite
+requirements.txt           pinned Python packages
 ```
 
 ## Running it
@@ -54,7 +58,7 @@ results/                   metrics.json, figures
 ```bash
 # Python 3.9, Windows. Create the environment once:
 "/c/Program Files/Python39/python.exe" -m venv .venv
-.venv/Scripts/python.exe -m pip install python-can cantools pandas numpy scikit-learn matplotlib pyarrow rarfile
+.venv/Scripts/python.exe -m pip install -r requirements.txt
 
 # Fetch the real tractor data (CC BY 4.0) into data/tumosan_raw/, then:
 .venv/Scripts/python.exe -I scripts/build_can_stream.py
@@ -63,8 +67,14 @@ results/                   metrics.json, figures
 ```
 
 The raw tractor archive is not committed; `AVAILABILITY.md` has its source and
-licence. The dataset released here is CC BY 4.0; attribute this project and the
-Tümosan source (DOI 10.17632/bbjtjrsxvx.2).
+licence. The full parquet dataset (about 45 MB) is not in this repository either:
+it is reproduced byte-for-byte by the three scripts above (the generator is
+seeded), and it will be attached to the tagged release or deposited with a DOI;
+until then it is available on request. `docs/DATASET_DATASHEET.md` lists the
+SHA-256 of every parquet file so a copy can be checked against this commit. The
+dataset is CC BY 4.0; attribute this project and the Tümosan source
+(DOI 10.17632/bbjtjrsxvx.2). The code is MIT-licensed (`LICENSE`); cite with
+`CITATION.cff`.
 
 ## Scope and honesty
 
