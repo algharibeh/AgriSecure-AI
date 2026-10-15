@@ -1,0 +1,95 @@
+{
+  "target_bytes": 10240,
+  "model": {
+    "name": "spr",
+    "layers": [
+      5,
+      8,
+      8,
+      1
+    ],
+    "n_weights": 112,
+    "n_biases": 17,
+    "inputs": [
+      "rpm_std",
+      "torque_std",
+      "rpm_mean",
+      "torque_mean",
+      "speed_std"
+    ],
+    "target": "fuel_std"
+  },
+  "bytes": {
+    "weights_int8": 112,
+    "biases_and_scales_f32": 80,
+    "input_index_table": 20,
+    "normalisation_and_threshold_f32": 100,
+    "activations_f32": 96,
+    "window_ring_buffer_f32": 162,
+    "feature_vector_f32": 48,
+    "rule_state_8_pgns": 256,
+    "total_static": 874
+  },
+  "under_target": true,
+  "quantisation": {
+    "scheme": "int8 symmetric per-tensor weights; float32 biases, activations",
+    "flag_agreement_with_float": 0.999946,
+    "window_level_int8": {
+      "tp": 840,
+      "fp": 73,
+      "fn": 2802,
+      "tn": 383133,
+      "precision": 0.92,
+      "recall": 0.2306,
+      "f1": 0.3688,
+      "fpr": 0.00019
+    },
+    "window_level_float": {
+      "tp": 826,
+      "fp": 76,
+      "fn": 2816,
+      "tn": 383130,
+      "precision": 0.9157,
+      "recall": 0.2268,
+      "f1": 0.3636,
+      "fpr": 0.000198
+    },
+    "hybrid_int8": {
+      "tp": 2821,
+      "fp": 722,
+      "fn": 821,
+      "tn": 382484,
+      "precision": 0.7962,
+      "recall": 0.7746,
+      "f1": 0.7852,
+      "fpr": 0.001884
+    },
+    "per_family": {
+      "flood": {
+        "int8": 0.0,
+        "float": 0.0
+      },
+      "freeze": {
+        "int8": 0.0145,
+        "float": 0.0145
+      },
+      "injection": {
+        "int8": 0.0,
+        "float": 0.0
+      },
+      "masquerade": {
+        "int8": 0.0011,
+        "float": 0.0011
+      },
+      "replay": {
+        "int8": 0.0,
+        "float": 0.0
+      }
+    }
+  },
+  "test_vectors": {
+    "n": 64,
+    "file": "embedded/test_vectors.h"
+  },
+  "note": "Static counts from the exported tensors and the C struct layout; compiled flash/RAM sizes are recorded separately in REPORT_phase2.md."
+}
