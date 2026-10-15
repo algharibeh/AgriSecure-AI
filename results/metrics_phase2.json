@@ -1,0 +1,305 @@
+{
+  "windows": {
+    "length_s": 1.0,
+    "hop_s": 0.1,
+    "features": [
+      "rpm_mean",
+      "rpm_std",
+      "rpm_chg",
+      "torque_mean",
+      "torque_std",
+      "torque_chg",
+      "fuel_mean",
+      "fuel_std",
+      "fuel_chg",
+      "speed_mean",
+      "speed_std",
+      "speed_chg"
+    ],
+    "std_transform": "log10(std + 0.01)",
+    "n_train": 446270,
+    "n_threshold": 56047,
+    "n_test": 386848,
+    "n_test_attacked": 3642
+  },
+  "models": {
+    "spr": {
+      "layers": [
+        5,
+        8,
+        8,
+        1
+      ],
+      "params": 129,
+      "inputs": [
+        "rpm_std",
+        "torque_std",
+        "rpm_mean",
+        "torque_mean",
+        "speed_std"
+      ],
+      "target": "fuel_std",
+      "threshold": 6.522369
+    },
+    "ae": {
+      "layers": [
+        12,
+        6,
+        3,
+        6,
+        12
+      ],
+      "params": 207,
+      "inputs": [
+        "rpm_mean",
+        "rpm_std",
+        "rpm_chg",
+        "torque_mean",
+        "torque_std",
+        "torque_chg",
+        "fuel_mean",
+        "fuel_std",
+        "fuel_chg",
+        "speed_mean",
+        "speed_std",
+        "speed_chg"
+      ],
+      "target": "reconstruction",
+      "threshold": 8.42198
+    }
+  },
+  "exported_model": "spr",
+  "fpr_target_clean_quantile": 0.001,
+  "window_level": {
+    "rule": {
+      "tp": 2809,
+      "fp": 651,
+      "fn": 833,
+      "tn": 382555,
+      "precision": 0.8118,
+      "recall": 0.7713,
+      "f1": 0.791,
+      "fpr": 0.001699
+    },
+    "ae": {
+      "tp": 557,
+      "fp": 113,
+      "fn": 3085,
+      "tn": 383093,
+      "precision": 0.8313,
+      "recall": 0.1529,
+      "f1": 0.2583,
+      "fpr": 0.000295
+    },
+    "spr": {
+      "tp": 826,
+      "fp": 76,
+      "fn": 2816,
+      "tn": 383130,
+      "precision": 0.9157,
+      "recall": 0.2268,
+      "f1": 0.3636,
+      "fpr": 0.000198
+    },
+    "hyb_ae": {
+      "tp": 2809,
+      "fp": 744,
+      "fn": 833,
+      "tn": 382462,
+      "precision": 0.7906,
+      "recall": 0.7713,
+      "f1": 0.7808,
+      "fpr": 0.001942
+    },
+    "hyb_spr": {
+      "tp": 2821,
+      "fp": 725,
+      "fn": 821,
+      "tn": 382481,
+      "precision": 0.7955,
+      "recall": 0.7746,
+      "f1": 0.7849,
+      "fpr": 0.001892
+    }
+  },
+  "per_family": {
+    "flood": {
+      "n_windows": 320,
+      "rule": 1.0,
+      "ae": 0.0,
+      "spr": 0.0,
+      "hyb_ae": 1.0,
+      "hyb_spr": 1.0
+    },
+    "freeze": {
+      "n_windows": 830,
+      "rule": 0.0,
+      "ae": 0.0,
+      "spr": 0.0145,
+      "hyb_ae": 0.0,
+      "hyb_spr": 0.0145
+    },
+    "injection": {
+      "n_windows": 953,
+      "rule": 1.0,
+      "ae": 0.5519,
+      "spr": 0.7345,
+      "hyb_ae": 1.0,
+      "hyb_spr": 1.0
+    },
+    "masquerade": {
+      "n_windows": 951,
+      "rule": 1.0,
+      "ae": 0.0,
+      "spr": 0.0,
+      "hyb_ae": 1.0,
+      "hyb_spr": 1.0
+    },
+    "replay": {
+      "n_windows": 588,
+      "rule": 0.9949,
+      "ae": 0.0527,
+      "spr": 0.1939,
+      "hyb_ae": 0.9949,
+      "hyb_spr": 0.9949
+    }
+  },
+  "event_detection": {
+    "rule": {
+      "flood": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 60.0
+      },
+      "injection": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 57.0
+      },
+      "masquerade": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 46.0
+      },
+      "replay": {
+        "episodes": 12,
+        "detected": 12,
+        "median_latency_ms": 50.5
+      },
+      "freeze": {
+        "episodes": 12,
+        "detected": 0,
+        "median_latency_ms": null
+      }
+    },
+    "ae": {
+      "flood": {
+        "episodes": 16,
+        "detected": 0,
+        "median_latency_ms": null
+      },
+      "injection": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 82.0
+      },
+      "masquerade": {
+        "episodes": 16,
+        "detected": 0,
+        "median_latency_ms": null
+      },
+      "replay": {
+        "episodes": 12,
+        "detected": 2,
+        "median_latency_ms": 80.0
+      },
+      "freeze": {
+        "episodes": 12,
+        "detected": 0,
+        "median_latency_ms": null
+      }
+    },
+    "spr": {
+      "flood": {
+        "episodes": 16,
+        "detected": 0,
+        "median_latency_ms": null
+      },
+      "injection": {
+        "episodes": 16,
+        "detected": 15,
+        "median_latency_ms": 101.0
+      },
+      "masquerade": {
+        "episodes": 16,
+        "detected": 0,
+        "median_latency_ms": null
+      },
+      "replay": {
+        "episodes": 12,
+        "detected": 4,
+        "median_latency_ms": 461.5
+      },
+      "freeze": {
+        "episodes": 12,
+        "detected": 1,
+        "median_latency_ms": 4622.0
+      }
+    },
+    "hyb_ae": {
+      "flood": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 60.0
+      },
+      "injection": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 57.0
+      },
+      "masquerade": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 46.0
+      },
+      "replay": {
+        "episodes": 12,
+        "detected": 12,
+        "median_latency_ms": 50.5
+      },
+      "freeze": {
+        "episodes": 12,
+        "detected": 0,
+        "median_latency_ms": null
+      }
+    },
+    "hyb_spr": {
+      "flood": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 60.0
+      },
+      "injection": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 57.0
+      },
+      "masquerade": {
+        "episodes": 16,
+        "detected": 16,
+        "median_latency_ms": 46.0
+      },
+      "replay": {
+        "episodes": 12,
+        "detected": 12,
+        "median_latency_ms": 50.5
+      },
+      "freeze": {
+        "episodes": 12,
+        "detected": 1,
+        "median_latency_ms": 4622.0
+      }
+    }
+  },
+  "runtime_s": 423.4
+}
