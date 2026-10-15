@@ -35,19 +35,39 @@ within about a millisecond and most replay attacks within about 44 ms. Stuck-val
 
 ![Detection by attack family](results/figures/detection_by_family.png)
 
+## Phase 2 — first result, started early on the Phase 1 data
+
+A tiny context model (5 → 8 → 8 → 1, 129 parameters) trained on clean traffic,
+quantised to int8, written out as a C header with a dependency-free C
+reference, and run as a hybrid with the Phase 1 rules. The hybrid detector
+compiles to **1,300 bytes on a Cortex-M4** (1,040 flash, 260 RAM; plus 256 B
+of rule state), measured with the GNU Arm toolchain, against the plan's 10 KB
+target; the C inference matches the Python model on the committed test vectors
+with no flag disagreements. The model adds in-window detection for injection
+and replay; freeze remains undetected across fields, for a measured reason
+stated in the report. A software-in-the-loop replay over a virtual CAN bus
+flags flood, injection, masquerade and replay within 0.1 to 1.3 ms on the wall
+clock. Hardware-in-the-loop is still open. Full write-up: `REPORT_phase2.md`.
+
 ## Layout
 
 ```
 AVAILABILITY.md            data sources, licences, tooling check
 REPORT.md                  Phase 1 report
+REPORT_phase2.md           Phase 2 first result: tiny model, int8 footprint, SIL
 docs/THREAT_MODEL.md       ISO/SAE 21434-style threat analysis
 docs/DATASET_DATASHEET.md  dataset provenance, schema, licence
 scripts/common.py          J1939 PGN/SPN mapping, packing, loaders
 scripts/build_can_stream.py   real signals -> J1939 frame stream
 scripts/inject_anomalies.py   seeded, labelled attack injection
 scripts/detect_baseline.py    rule-based + Isolation Forest, metrics
+scripts/train_tiny_model.py   Phase 2 window features, tiny models, hybrid evaluation
+scripts/export_embedded.py    int8 export, C header, test vectors, footprint
+scripts/sil_replay.py         software-in-the-loop replay over a virtual CAN bus
+embedded/tiny_ids.c        C99 reference detector (rules + model) with self-test
+embedded/model_weights.h   generated int8 weights; embedded/test_vectors.h
 dataset/                   events.csv + readable sample (parquet files untracked, see below)
-results/                   metrics.json, figures
+results/                   metrics.json, metrics_phase2.json, footprint, SIL, build log, figures
 LICENSE                    MIT for the code; the dataset is CC BY 4.0
 CITATION.cff               how to cite
 requirements.txt           pinned Python packages
@@ -64,6 +84,13 @@ requirements.txt           pinned Python packages
 .venv/Scripts/python.exe -I scripts/build_can_stream.py
 .venv/Scripts/python.exe -I scripts/inject_anomalies.py
 .venv/Scripts/python.exe -I scripts/detect_baseline.py
+
+# Phase 2:
+.venv/Scripts/python.exe -I scripts/train_tiny_model.py
+.venv/Scripts/python.exe -I scripts/export_embedded.py
+.venv/Scripts/python.exe -I scripts/sil_replay.py
+# C reference (needs a compiler; commands in embedded/tiny_ids.c):
+#   gcc -std=c99 -O2 -Wall -o tiny_ids embedded/tiny_ids.c -lm && ./tiny_ids
 ```
 
 The raw tractor archive is not committed; `AVAILABILITY.md` has its source and
