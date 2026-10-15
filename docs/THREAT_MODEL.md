@@ -62,6 +62,10 @@ device.
 | **Replay** | An earlier block of real frames re-sent later verbatim (stale values) | Doubled rate for the PGN; value inconsistent with current state |
 | **Freeze (stuck value)** | An existing sensor PGN held at a constant payload (stuck/held sensor) | Value does not change while the process does |
 
+In the terms used in the project plan: spoofing corresponds to the injection and
+masquerade families; replay to replay; denial-of-service to flood; freeze is an
+additional stuck-sensor family.
+
 ## 5. Risk rating (qualitative)
 
 Rating combines impact (from the damage scenario) and attack feasibility
