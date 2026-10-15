@@ -1,0 +1,81 @@
+{
+  "n_test_frames": 2261382,
+  "n_attack_frames": 18172,
+  "attack_prevalence": 0.00804,
+  "rule_based": {
+    "tp": 16979,
+    "fp": 1178,
+    "fn": 1193,
+    "tn": 2242032,
+    "precision": 0.9351,
+    "recall": 0.9343,
+    "f1": 0.9347,
+    "fpr": 0.000525
+  },
+  "isolation_forest": {
+    "tp": 1988,
+    "fp": 17238,
+    "fn": 16184,
+    "tn": 2225972,
+    "precision": 0.1034,
+    "recall": 0.1094,
+    "f1": 0.1063,
+    "fpr": 0.007685
+  },
+  "rule_throughput_frames_per_s": 1778661,
+  "rule_us_per_frame": 0.56,
+  "per_family": {
+    "flood": {
+      "n": 14553,
+      "rule_recall": 1.0,
+      "iforest_recall": 0.0011
+    },
+    "freeze": {
+      "n": 720,
+      "rule_recall": 0.0,
+      "iforest_recall": 0.0
+    },
+    "injection": {
+      "n": 1613,
+      "rule_recall": 0.7762,
+      "iforest_recall": 0.6572
+    },
+    "masquerade": {
+      "n": 806,
+      "rule_recall": 1.0,
+      "iforest_recall": 0.768
+    },
+    "replay": {
+      "n": 480,
+      "rule_recall": 0.7667,
+      "iforest_recall": 0.6104
+    }
+  },
+  "event_detection": {
+    "flood": {
+      "episodes": 16,
+      "detected": 16,
+      "median_latency_ms": 0.2
+    },
+    "freeze": {
+      "episodes": 12,
+      "detected": 0,
+      "median_latency_ms": null
+    },
+    "injection": {
+      "episodes": 16,
+      "detected": 16,
+      "median_latency_ms": 0.1
+    },
+    "masquerade": {
+      "episodes": 16,
+      "detected": 16,
+      "median_latency_ms": 0.0
+    },
+    "replay": {
+      "episodes": 12,
+      "detected": 10,
+      "median_latency_ms": 44.3
+    }
+  }
+}

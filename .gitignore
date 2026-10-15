@@ -6,9 +6,12 @@ downloads/
 *.gz
 *.log.bin
 
-# Generated dataset blobs (keep schema + datasheet in git, not the big files)
+# Generated dataset blobs (keep schema, datasheet, events + sample in git)
+dataset/normal/
+dataset/attacked/
 dataset/*.parquet
-dataset/*.csv
+results/*.parquet
+# (dataset/events.csv and dataset/SAMPLE_*.csv are small and intentionally tracked)
 
 # Python
 .venv/
