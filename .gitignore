@@ -27,3 +27,6 @@ results/*.npy
 embedded/*.o
 embedded/tiny_ids
 embedded/tiny_ids.exe
+
+# Reproduction logs written by reproduce.py
+results/reproduction_log_*.txt

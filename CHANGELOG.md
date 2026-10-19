@@ -15,6 +15,11 @@ Phase 2, first result, started early on the Phase 1 data.
   Cortex-M0+; build log in `results/embedded_build_phase2.txt`.
 - Software-in-the-loop replay over a python-can virtual bus
   (`scripts/sil_replay.py`), results in `results/sil_phase2.json`.
+- `reproduce.py`: one command that runs the Phase 1 and Phase 2 scripts in
+  order, rebuilds the figures, runs the C self-test when a compiler is present,
+  and compares the regenerated result files, headers, model, events list and
+  parquet checksums with the record at this commit; writes a dated log to
+  `results/` (ignored by git). README `Running it` updated.
 - `REPORT_phase2.md`; README Phase 2 section.
 - Reader-facing material: a process diagram (`docs/figures/process.svg`;
   the README's Mermaid copy of it was removed so the README prints as it is

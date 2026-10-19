@@ -114,7 +114,12 @@ requirements.txt           pinned Python packages
 "/c/Program Files/Python39/python.exe" -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements.txt
 
-# Fetch the real tractor data (CC BY 4.0) into data/tumosan_raw/, then:
+# Fetch the real tractor data (CC BY 4.0) into data/tumosan_raw/, then either
+# reproduce everything with one command (Phase 1, Phase 2, figures, the C
+# self-test if a compiler is on the PATH, and a comparison with the files on
+# record; about 15 to 25 minutes; log in results/reproduction_log_<stamp>.txt):
+.venv/Scripts/python.exe -I reproduce.py
+# or run the steps one at a time:
 .venv/Scripts/python.exe -I scripts/build_can_stream.py
 .venv/Scripts/python.exe -I scripts/inject_anomalies.py
 .venv/Scripts/python.exe -I scripts/detect_baseline.py
@@ -127,6 +132,15 @@ requirements.txt           pinned Python packages
 # C reference (needs a compiler; commands in embedded/tiny_ids.c):
 #   gcc -std=c99 -O2 -Wall -o tiny_ids embedded/tiny_ids.c -lm && ./tiny_ids
 ```
+
+`reproduce.py` runs the scripts above in order and then compares what the run
+produced with this commit's record: `results/metrics.json`,
+`results/metrics_phase2.json` and `results/footprint_phase2.json` value by value
+(timing fields excluded), the embedded headers, the exported model and
+`dataset/events.csv` byte for byte, the SIL latencies side by side (they depend
+on the machine), and the parquet checksums against `docs/DATASET_DATASHEET.md`.
+`--skip-sil` saves three minutes; `--steps build,inject` runs a subset; `--compare-only` checks the files already in the working tree without running anything; `--help`
+lists the rest.
 
 The raw tractor archive is not committed; `AVAILABILITY.md` has its source and
 licence. The full parquet dataset (about 45 MB) is not in this repository either:
