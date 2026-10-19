@@ -118,7 +118,7 @@ requirements.txt           pinned Python packages
 # reproduce everything with one command (Phase 1, Phase 2, figures, the C
 # self-test if a compiler is on the PATH, and a comparison with the files on
 # record; about 15 to 25 minutes; log in results/reproduction_log_<stamp>.txt):
-.venv/Scripts/python.exe -I reproduce.py
+.venv/Scripts/python.exe -I reproduce.py        # or double-click reproduce.bat
 # or run the steps one at a time:
 .venv/Scripts/python.exe -I scripts/build_can_stream.py
 .venv/Scripts/python.exe -I scripts/inject_anomalies.py

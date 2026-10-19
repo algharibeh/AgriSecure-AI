@@ -13,7 +13,13 @@ Run with (Windows, from the repository root):
 
     .venv/Scripts/python.exe -I reproduce.py
 
+or double-click reproduce.bat, which uses the repository's .venv and keeps the
+window open when the run ends. Each step is announced as "[k/8] name (started
+hh:mm:ss)", its own output streams live, a line every 20 s shows a quiet step is
+still running, and "done in N s" closes it.
+
 Options:
+    --pause           wait for Enter before exiting (reproduce.bat passes this)
     --skip-sil        skip the software-in-the-loop replay (about three minutes
                       of wall-clock time; its latencies are timing-dependent)
     --skip-figures    skip scripts/make_figures.py
@@ -38,7 +44,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import time
+import traceback
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -168,13 +176,31 @@ def snapshot_record(tmp: Path, log: Log) -> dict:
 # --------------------------------------------------------------------------- #
 def run_script(script: str, log: Log) -> float:
     t0 = time.time()
-    cmd = [sys.executable, "-I", str(SCRIPTS / script)]
+    # -u: unbuffered, so the step's own prints appear as they happen
+    cmd = [sys.executable, "-I", "-u", str(SCRIPTS / script)]
     log(f"$ {' '.join(cmd)}")
+    env = dict(os.environ, PYTHONUNBUFFERED="1")
     proc = subprocess.Popen(cmd, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                            text=True, encoding="utf-8", errors="replace", bufsize=1)
+                            text=True, encoding="utf-8", errors="replace", bufsize=1, env=env)
     assert proc.stdout is not None
-    for line in proc.stdout:
-        log("  | " + line.rstrip("\n"))
+    last = [time.time()]
+    stop = threading.Event()
+
+    def heartbeat() -> None:
+        # a line every 20 s of silence, so a long step visibly keeps running
+        while not stop.wait(5):
+            if time.time() - last[0] >= 20:
+                print(f"  ... {script} still running ({time.time() - t0:.0f} s elapsed)", flush=True)
+                last[0] = time.time()
+
+    hb = threading.Thread(target=heartbeat, daemon=True)
+    hb.start()
+    try:
+        for line in proc.stdout:
+            log("  | " + line.rstrip("\n"))
+            last[0] = time.time()
+    finally:
+        stop.set()
     rc = proc.wait()
     dt = time.time() - t0
     if rc != 0:
@@ -384,6 +410,8 @@ def main() -> int:
     ap.add_argument("--steps", default=None, help="comma-separated subset of: " + ",".join(s[0] for s in STEPS))
     ap.add_argument("--compare-only", action="store_true",
                     help="run nothing; compare the files now in the working tree with the record")
+    ap.add_argument("--pause", action="store_true",
+                    help="wait for Enter before exiting (keeps a double-clicked console window open)")
     args = ap.parse_args()
 
     RESULTS.mkdir(exist_ok=True)
@@ -425,11 +453,9 @@ def main() -> int:
     if args.compare_only:
         ran = {s[0] for s in STEPS if s[0] != "ctest"}
     ctest = ("not run", "")
-    for name, script, writes in STEPS:
-        if name not in wanted:
-            continue
+    for k, (name, script, writes) in enumerate([s for s in STEPS if s[0] in wanted], start=1):
         log()
-        log(f"[{name}] -> {writes}")
+        log(f"[{k}/{len(wanted)}] {name}  (started {_dt.datetime.now():%H:%M:%S}) -> {writes}")
         if name == "ctest":
             t0 = time.time()
             ctest = run_ctest(find_cc(args.cc), log)
@@ -475,5 +501,27 @@ def main() -> int:
     return 0 if verdict.startswith("all") or not rows else 1
 
 
+def _entry() -> int:
+    pause = "--pause" in sys.argv
+    try:
+        return main()
+    except SystemExit as exc:
+        if exc.code not in (0, None):
+            print(f"\nStopped: {exc.code}", flush=True)
+        return exc.code if isinstance(exc.code, int) else 1
+    except KeyboardInterrupt:
+        print("\nInterrupted.", flush=True)
+        return 130
+    except Exception:
+        traceback.print_exc()
+        return 1
+    finally:
+        if pause:
+            try:
+                input("\nPress Enter to close this window...")
+            except EOFError:
+                pass
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(_entry())

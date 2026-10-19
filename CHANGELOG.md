@@ -19,7 +19,10 @@ Phase 2, first result, started early on the Phase 1 data.
   order, rebuilds the figures, runs the C self-test when a compiler is present,
   and compares the regenerated result files, headers, model, events list and
   parquet checksums with the record at this commit; writes a dated log to
-  `results/` (ignored by git). README `Running it` updated.
+  `results/` (ignored by git). Steps are announced with a counter and start
+  time, their output streams live with a heartbeat every 20 s, and
+  `reproduce.bat` launches the run from Explorer with the repository's `.venv`
+  and keeps the window open. README `Running it` updated.
 - `REPORT_phase2.md`; README Phase 2 section.
 - Reader-facing material: a process diagram (`docs/figures/process.svg`;
   the README's Mermaid copy of it was removed so the README prints as it is
