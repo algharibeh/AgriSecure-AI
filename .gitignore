@@ -36,3 +36,7 @@ embedded/tiny_ids.exe
 
 # Reproduction logs written by reproduce.py
 results/reproduction_log_*.txt
+
+# Bundled Python (python.org embeddable 3.9.13, unpacked by reproduce.bat on first run)
+tools/python/
+!tools/python-3.9.13-embed-amd64.zip

@@ -102,6 +102,7 @@ embedded/tiny_ids.c        C99 reference detector (rules + model) with self-test
 embedded/model_weights.h   generated int8 weights; embedded/test_vectors.h
 dataset/                   events.csv + readable sample (parquet files untracked, see below)
 results/                   metrics, footprint, SIL, build log, figures
+tools/                     python.org embeddable Python 3.9.13 + get-pip.py, used by reproduce.bat
 LICENSE                    MIT for the code; the dataset is CC BY 4.0
 CITATION.cff               how to cite
 requirements.txt           pinned Python packages
@@ -109,13 +110,17 @@ requirements.txt           pinned Python packages
 
 ## Running it
 
-On Windows with Python 3.9 installed, double-click `reproduce.bat`. On the first
-run it creates the repository's own environment (`.venv`) from the pinned
-requirements, which needs an internet connection for pip; every run then unpacks
-the tractor recording if needed, runs Phase 1, Phase 2 and the figures, runs the
-C self-test if a compiler is on the PATH, and compares the output with the files
-on record (about 15 to 25 minutes; log in `results/reproduction_log_<stamp>.txt`).
-The same by hand, or on another operating system:
+On Windows, double-click `reproduce.bat`; nothing needs to be installed. The
+repository carries python.org's embeddable Python 3.9.13 and pip's bootstrap
+script under `tools/` (see `tools/README.md`). On the first run the batch file
+unpacks that Python into `tools/python`, installs the pinned requirements into
+it from the Python Package Index (about 120 MB, so an internet connection is
+needed once), and then runs `reproduce.py` with it; later runs reuse it. Every
+run unpacks the tractor recording if needed, runs Phase 1, Phase 2 and the
+figures, runs the C self-test if a compiler is on the PATH, and compares the
+output with the files on record (about 15 to 25 minutes; log in
+`results/reproduction_log_<stamp>.txt`). The same by hand, with a Python 3.9 of
+your own, or on another operating system:
 
 ```bash
 # Python 3.9. Create the environment once:

@@ -13,9 +13,10 @@ Run with (Windows, from the repository root):
 
     .venv/Scripts/python.exe -I reproduce.py
 
-or double-click reproduce.bat, which creates the repository's .venv from the
-pinned requirements on the first run (Python 3.9 and an internet connection
-needed once), then runs this script and keeps the window open when the run ends. Each step is announced as "[k/8] name (started
+or double-click reproduce.bat, which needs nothing installed: on the first run
+it unpacks the bundled python.org Python 3.9.13 from tools/, installs the pinned
+requirements into it (internet needed once), then runs this script and keeps
+the window open when the run ends. Each step is announced as "[k/8] name (started
 hh:mm:ss)", its own output streams live, a line every 20 s shows a quiet step is
 still running, and "done in N s" closes it.
 
