@@ -1,10 +1,16 @@
-# Raw and downloaded data — never commit (large and/or third-party licensed)
-data/
+# Raw and downloaded data — never commit (large and/or third-party licensed),
+# except the Tümosan recording (CC BY 4.0), which ships as data/tumosan_raw/FIELD_FILES.zip
+# with the authors' README; the unpacked .tab files stay untracked
 downloads/
 *.rar
 *.zip
 *.gz
 *.log.bin
+data/*
+!data/tumosan_raw/
+data/tumosan_raw/*
+!data/tumosan_raw/FIELD_FILES.zip
+!data/tumosan_raw/README.txt
 
 # Generated dataset blobs (keep schema, datasheet, events + sample in git)
 dataset/normal/

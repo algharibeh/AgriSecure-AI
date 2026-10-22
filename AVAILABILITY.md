@@ -24,7 +24,7 @@ could not be confirmed.
 
 | Source | Content | Licence | Access | Role in Phase 1 |
 | --- | --- | --- | --- | --- |
-| Tümosan 81.110 (Mendeley, DOI 10.17632/bbjtjrsxvx.2) | Real tractor J1939 soil-tillage traffic, 24.7 h, ~889k samples @10 Hz, decoded signals | **CC BY 4.0** (stated in the archive's README) | Public API returns `FIELD_FILES.rar`, 8.51 MB, no login | **Core** real agricultural normal-behaviour base |
+| Tümosan 81.110 (Mendeley, DOI 10.17632/bbjtjrsxvx.2) | Real tractor J1939 soil-tillage traffic, 24.7 h, ~889k samples @10 Hz, decoded signals | **CC BY 4.0** (stated in the archive's README) | Public API returns `FIELD_FILES.rar`, 8.51 MB, no login; the ten files are included unchanged in this repository as `data/tumosan_raw/FIELD_FILES.zip` (8.7 MB) with the authors' README | **Core** real agricultural normal-behaviour base |
 | Colorado State heavy-vehicle logs | Real truck J1939 candump logs (Kenworth T270, DD15) | Page terms; cite | Direct `.zip` links live (up to ~2 GB) | Optional cross-domain real traffic |
 | Korea Univ. J1939DB-IDS (DOI 10.21227/sd9k-ct72) | Decoded J1939 + 11 labelled attack scenarios (trucks) | Not stated; citation required | Dropbox + IEEE DataPort | External comparison baseline only (not redistributed); deferred to Phase 2 |
 | TUM 5-tractor (DOI 10.1016/j.dib.2025.111494) | 862 h real J1939 + ISOBUS, GNSS | CC BY 4.0 (Zenodo record) | Zenodo, DOI 10.5281/zenodo.14619787: five zip files, 2.8 GB, no login | Nice-to-have; not on critical path |
@@ -60,8 +60,10 @@ Closing that gap with real tractor traffic plus reproducible, simulated anomalie
   `scikit-learn`, `matplotlib`. A fresh `.venv` will be created for this project;
   the versions used are pinned in `requirements.txt`.
 - Notes: the bare `python` command is the broken Windows Store alias — use the
-  full path or the venv. The Tümosan download is a `.rar`, so a `.rar` extractor
-  (7-Zip or `rarfile` + `unrar`) is needed at build time.
+  full path or the venv. The Tümosan files ship with the repository as
+  `data/tumosan_raw/FIELD_FILES.zip`, which `reproduce.py` unpacks with the
+  standard library; a `.rar` extractor (7-Zip or `rarfile` + `unrar`) is needed
+  only to unpack a fresh download from Mendeley.
 
 ## What Phase 1 will produce (software)
 

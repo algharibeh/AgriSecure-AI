@@ -13,8 +13,9 @@ Run with (Windows, from the repository root):
 
     .venv/Scripts/python.exe -I reproduce.py
 
-or double-click reproduce.bat, which uses the repository's .venv and keeps the
-window open when the run ends. Each step is announced as "[k/8] name (started
+or double-click reproduce.bat, which creates the repository's .venv from the
+pinned requirements on the first run (Python 3.9 and an internet connection
+needed once), then runs this script and keeps the window open when the run ends. Each step is announced as "[k/8] name (started
 hh:mm:ss)", its own output streams live, a line every 20 s shows a quiet step is
 still running, and "done in N s" closes it.
 
@@ -29,8 +30,9 @@ Options:
     --steps a,b,...   run only these steps, by name (see STEPS below)
 
 Nothing here contacts any device or network; the SIL replay uses a python-can
-virtual bus inside this process. The raw tractor data are not downloaded here:
-see AVAILABILITY.md for the source (Mendeley DOI 10.17632/bbjtjrsxvx.2, CC BY 4.0).
+virtual bus inside this process. The real tractor data ship with the repository
+(data/tumosan_raw/FIELD_FILES.zip, CC BY 4.0) and are unpacked on first run;
+see AVAILABILITY.md for the source (Mendeley DOI 10.17632/bbjtjrsxvx.2).
 """
 from __future__ import annotations
 
@@ -112,6 +114,17 @@ def check_environment(log: Log) -> None:
         sys.exit(2)
     tabs = sorted(RAW_DIR.glob("FIELD_*.tab"))
     if len(tabs) < 10:
+        # the recording ships with the repository as a zip (CC BY 4.0); unpack it
+        # with the standard library, no extra tool needed
+        zips = sorted(RAW_DIR.glob("*.zip")) if RAW_DIR.exists() else []
+        if zips:
+            import zipfile
+            log(f"  found {zips[0].name}; unpacking the FIELD_*.tab files from it")
+            with zipfile.ZipFile(str(zips[0])) as zf:
+                members = [n for n in zf.namelist() if re.fullmatch(r"FIELD_\d+_.*\.tab", n)]
+                zf.extractall(str(RAW_DIR), members=members)
+            tabs = sorted(RAW_DIR.glob("FIELD_*.tab"))
+    if len(tabs) < 10:
         rars = list(RAW_DIR.glob("*.rar")) if RAW_DIR.exists() else []
         if rars:
             log(f"  found {rars[0].name} but only {len(tabs)} FIELD_*.tab files; trying to extract it")
@@ -123,7 +136,8 @@ def check_environment(log: Log) -> None:
             except Exception as exc:  # rarfile needs an unrar/7z backend
                 log(f"  extraction failed ({exc}); extract {rars[0].name} into data/tumosan_raw/ by hand")
     if len(tabs) < 10:
-        log("  the real tractor data are not present: expected ten FIELD_*.tab files in data/tumosan_raw/.")
+        log("  the real tractor data are not present: expected ten FIELD_*.tab files in data/tumosan_raw/, "
+            "or data/tumosan_raw/FIELD_FILES.zip as shipped with the repository.")
         log("  Source: Mendeley Data, DOI 10.17632/bbjtjrsxvx.2 (CC BY 4.0), archive FIELD_FILES.rar; "
             "see AVAILABILITY.md. Nothing is downloaded by this script.")
         sys.exit(2)

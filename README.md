@@ -109,17 +109,23 @@ requirements.txt           pinned Python packages
 
 ## Running it
 
+On Windows with Python 3.9 installed, double-click `reproduce.bat`. On the first
+run it creates the repository's own environment (`.venv`) from the pinned
+requirements, which needs an internet connection for pip; every run then unpacks
+the tractor recording if needed, runs Phase 1, Phase 2 and the figures, runs the
+C self-test if a compiler is on the PATH, and compares the output with the files
+on record (about 15 to 25 minutes; log in `results/reproduction_log_<stamp>.txt`).
+The same by hand, or on another operating system:
+
 ```bash
-# Python 3.9, Windows. Create the environment once:
+# Python 3.9. Create the environment once:
 "/c/Program Files/Python39/python.exe" -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements.txt
 
-# Fetch the real tractor data (CC BY 4.0) into data/tumosan_raw/, then either
-# reproduce everything with one command (Phase 1, Phase 2, figures, the C
-# self-test if a compiler is on the PATH, and a comparison with the files on
-# record; about 15 to 25 minutes; log in results/reproduction_log_<stamp>.txt):
-.venv/Scripts/python.exe -I reproduce.py        # or double-click reproduce.bat
-# or run the steps one at a time:
+# The real tractor data (CC BY 4.0) ship in data/tumosan_raw/FIELD_FILES.zip and
+# are unpacked on the first run. Either reproduce everything with one command:
+.venv/Scripts/python.exe -I reproduce.py        # what reproduce.bat runs
+# or run the steps one at a time (unzip FIELD_FILES.zip in place first):
 .venv/Scripts/python.exe -I scripts/build_can_stream.py
 .venv/Scripts/python.exe -I scripts/inject_anomalies.py
 .venv/Scripts/python.exe -I scripts/detect_baseline.py
@@ -142,8 +148,11 @@ on the machine), and the parquet checksums against `docs/DATASET_DATASHEET.md`.
 `--skip-sil` saves three minutes; `--steps build,inject` runs a subset; `--compare-only` checks the files already in the working tree without running anything; `--help`
 lists the rest.
 
-The raw tractor archive is not committed; `AVAILABILITY.md` has its source and
-licence. The full parquet dataset (about 45 MB) is not in this repository either:
+The real tractor recording is included: `data/tumosan_raw/FIELD_FILES.zip` holds
+the ten field files of the Tümosan dataset unchanged (Mendeley Data,
+DOI 10.17632/bbjtjrsxvx.2, CC BY 4.0), with the authors' README beside it;
+`reproduce.py` unpacks it on the first run, and `AVAILABILITY.md` has the source
+and licence. The full parquet dataset (about 45 MB) is not in this repository either:
 it is reproduced byte-for-byte by the three scripts above (the generator is
 seeded), and it will be attached to the tagged release or deposited with a DOI;
 until then it is available on request. `docs/DATASET_DATASHEET.md` lists the

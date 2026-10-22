@@ -15,7 +15,9 @@ traffic with labelled attacks as of October 2026 (sources checked are listed in
 - **Normal content is real.** Every normal frame's payload carries values recorded
   from a Tümosan 81.110 P tractor during real soil-tillage operation
   (Mendeley Data, DOI 10.17632/bbjtjrsxvx.2, CC BY 4.0). The source publishes
-  decoded signal time series at 10 Hz, not raw CAN frames.
+  decoded signal time series at 10 Hz, not raw CAN frames. The ten source files
+  are included unchanged in `data/tumosan_raw/FIELD_FILES.zip`, with the authors'
+  README, under the same CC BY 4.0 licence.
 - **The frame layer is reconstructed.** Each recorded signal is placed back into
   the standard J1939-71 parameter group that carries it, at that group's standard
   transmission period, with the real value packed using the documented SPN
