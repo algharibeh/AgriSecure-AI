@@ -1,0 +1,2 @@
+# Batch files keep Windows line endings as stored: cmd.exe cannot find goto labels in LF-only files
+*.bat -text
