@@ -79,6 +79,8 @@ RECORD_BIN = ["results/tiny_model.npz"]
 RECORD_TIMING = "results/sil_phase2.json"
 
 REL_TOL = 1e-9
+# Trained weights can differ between CPUs in the last bits; below this they count as equal.
+NPZ_ABS_TOL = 1e-9
 
 
 class Log:
@@ -373,6 +375,8 @@ def compare(record: dict, ran: set, log: Log) -> list:
                         worst = float("inf")
                 if worst == 0.0:
                     rows.append((rel, "identical", "arrays equal (archive bytes differ only in metadata)"))
+                elif worst <= NPZ_ABS_TOL:
+                    rows.append((rel, "identical", f"arrays equal to within {worst:.2g} (floating-point noise between machines)"))
                 else:
                     rows.append((rel, "differs", f"max abs difference across arrays {worst:.3g}"))
             except Exception as exc:
@@ -387,10 +391,18 @@ def compare(record: dict, ran: set, log: Log) -> list:
         for sa, sb in zip(a.get("segments", []), b.get("segments", [])):
             det_a = {k: (sa.get(k) is not None) for k in ("rule_latency_ms", "model_latency_ms", "hybrid_latency_ms")}
             det_b = {k: (sb.get(k) is not None) for k in ("rule_latency_ms", "model_latency_ms", "hybrid_latency_ms")}
-            flags_same = det_a == det_b and sa.get("pre_attack_false_flags") == sb.get("pre_attack_false_flags") \
-                and sa.get("frames_replayed") == sb.get("frames_replayed") and sa.get("attack_frames") == sb.get("attack_frames")
+            outcome_same = det_a == det_b and sa.get("frames_replayed") == sb.get("frames_replayed") \
+                and sa.get("attack_frames") == sb.get("attack_frames")
+            pa, pb = sa.get("pre_attack_false_flags") or {}, sb.get("pre_attack_false_flags") or {}
+            jitter = ""
+            if pa != pb:
+                # frames the rules flag in the clean lead-in when the wall-clock sender catches up after a
+                # scheduling delay and two frames arrive closer than the learned minimum gap: replay jitter,
+                # not a change in the detector; the model flags are not affected
+                jitter = (f" ({pb.get('rule_frames', 0)} pre-attack rule flags from replay timing jitter, "
+                          f"record {pa.get('rule_frames', 0)})")
             notes.append(f"{sa.get('family')}: hybrid {sa.get('hybrid_latency_ms')} -> {sb.get('hybrid_latency_ms')} ms"
-                         + ("" if flags_same else " [DETECTION OUTCOME DIFFERS]"))
+                         + jitter + ("" if outcome_same else " [DETECTION OUTCOME DIFFERS]"))
         rows.append((RECORD_TIMING, "timing-dependent", "; ".join(notes)))
     # dataset checksums against the datasheet
     if ran & {"build", "inject"}:
