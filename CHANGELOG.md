@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — unreleased (2026-10-15)
+## 0.2.0 — 2026-10-25
 
 Phase 2, first result, started early on the Phase 1 data.
 

@@ -5,8 +5,8 @@ title: "AgriSecure-AI: Phase 1 threat model, labelled J1939 dataset and baseline
 authors:
   - family-names: Algharibeh
     given-names: Moath
-version: 0.1.0
-date-released: 2026-10-15
+version: 0.2.0
+date-released: 2026-10-25
 repository-code: "https://github.com/algharibeh/AgriSecure-AI"
 license: MIT
 keywords:
